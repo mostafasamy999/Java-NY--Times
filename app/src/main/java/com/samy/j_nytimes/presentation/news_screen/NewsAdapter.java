@@ -2,6 +2,7 @@ package com.samy.j_nytimes.presentation.news_screen;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.DiffUtil;
@@ -17,7 +18,10 @@ public class NewsAdapter extends ListAdapter<NewsArticle, NewsAdapter.NewsViewHo
     protected NewsAdapter() {
         super(DIFF_CALLBACK);
     }
-
+    private OnItemClickListener onClickListener;
+    public interface OnItemClickListener {
+        void onItemClick(NewsArticle article);
+    }
     private static final DiffUtil.ItemCallback<NewsArticle> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<NewsArticle>() {
                 @Override
@@ -41,7 +45,11 @@ public class NewsAdapter extends ListAdapter<NewsArticle, NewsAdapter.NewsViewHo
 
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position) {
-        holder.bind(getItem(position));
+        holder.bind(getItem(position),onClickListener);
+
+    }
+    public void setOnClickListener(OnItemClickListener listener) {
+        this.onClickListener = listener;
     }
 
     static class NewsViewHolder extends RecyclerView.ViewHolder {
@@ -52,17 +60,23 @@ public class NewsAdapter extends ListAdapter<NewsArticle, NewsAdapter.NewsViewHo
             this.binding = binding;
         }
 
-        void bind(NewsArticle article) {
+        void bind(NewsArticle article, OnItemClickListener onClickListener) {
             Log.d("mos samy", "artical:title: " + article.getTitle());
             Log.d("mos samy", "artical:url: " + article.getImageUrl());
             binding.titleText.setText(article.getTitle());
             binding.authorText.setText(article.getAuthor());
-            binding.dateText.setText(article.getDate());
+            binding.dateText.setText(article.getDate().substring(0,10));
             // Load image using Glide
             Glide.with(binding.getRoot())
                     .load("https://static01.nyt.com/"+article.getImageUrl())
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.newsImage);
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickListener.onItemClick(article);
+                }
+            });
         }
     }
 }

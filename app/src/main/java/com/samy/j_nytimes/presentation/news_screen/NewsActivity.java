@@ -1,6 +1,7 @@
 package com.samy.j_nytimes.presentation.news_screen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.samy.j_nytimes.databinding.ActivityNewsBinding;
+import com.samy.j_nytimes.domain.entities.NewsArticle;
+import com.samy.j_nytimes.presentation.detail_screen.DetailActivity;
 import com.samy.j_nytimes.utils.Utils;
 
 import javax.inject.Inject;
@@ -33,16 +36,31 @@ public class NewsActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(NewsViewModel.class);
         setContentView(binding.getRoot());
         Utils.statusBarColor(this);
-       setupRecyclerView();
+        setupRecyclerView();
         observeNews();
     }
+
     private void setupRecyclerView() {
         newsAdapter = new NewsAdapter();
+        newsAdapter.setOnClickListener(new NewsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(NewsArticle article) {
+                Intent intent = new Intent(NewsActivity.this, DetailActivity.class);
+                intent.putExtra("title", article.getTitle());
+                intent.putExtra("date", article.getDate());
+                intent.putExtra("auth", article.getAuthor());
+                intent.putExtra("imgUrl", article.getImageUrl());
+                intent.putExtra("description", article.getSummary());
+                startActivity(intent);
+
+            }
+        });
         binding.recyclerView.setAdapter(newsAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         );
+
     }
 
     private void observeNews() {
