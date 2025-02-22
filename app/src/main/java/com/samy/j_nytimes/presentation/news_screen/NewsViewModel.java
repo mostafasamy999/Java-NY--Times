@@ -36,7 +36,7 @@ public class NewsViewModel extends ViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        articles -> _newsArticles.setValue(Resource.success(articles)),
+                        articles -> _newsArticles.setValue(Resource.success( articles)),
                         error -> _newsArticles.setValue(Resource.error(error.getMessage()))
                 );
     }

@@ -13,7 +13,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface NewsApiService {
-    @GET("mostpopular/v2/viewed/7.json")
+    @GET("search/v2/articlesearch.json/")
     Observable<NewsResponse> getMostPopularArticles(
             @Query("api-key") String apiKey
     );

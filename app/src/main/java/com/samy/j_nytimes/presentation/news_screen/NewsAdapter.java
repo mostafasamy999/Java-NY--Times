@@ -1,5 +1,6 @@
 package com.samy.j_nytimes.presentation.news_screen;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -17,23 +18,23 @@ public class NewsAdapter extends ListAdapter<NewsArticle, NewsAdapter.NewsViewHo
         super(DIFF_CALLBACK);
     }
 
-    private static final DiffUtil.ItemCallback<NewsArticle> DIFF_CALLBACK = 
-        new DiffUtil.ItemCallback<NewsArticle>() {
-            @Override
-            public boolean areItemsTheSame(NewsArticle oldItem, NewsArticle newItem) {
-                return oldItem.getTitle().equals(newItem.getTitle());
-            }
+    private static final DiffUtil.ItemCallback<NewsArticle> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<NewsArticle>() {
+                @Override
+                public boolean areItemsTheSame(NewsArticle oldItem, NewsArticle newItem) {
+                    return oldItem.getTitle().equals(newItem.getTitle());
+                }
 
-            @Override
-            public boolean areContentsTheSame(NewsArticle oldItem, NewsArticle newItem) {
-                return oldItem.equals(newItem);
-            }
-        };
+                @Override
+                public boolean areContentsTheSame(NewsArticle oldItem, NewsArticle newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 
     @Override
     public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemNewsBinding binding = ItemNewsBinding.inflate(
-            LayoutInflater.from(parent.getContext()), parent, false
+                LayoutInflater.from(parent.getContext()), parent, false
         );
         return new NewsViewHolder(binding);
     }
@@ -52,14 +53,15 @@ public class NewsAdapter extends ListAdapter<NewsArticle, NewsAdapter.NewsViewHo
         }
 
         void bind(NewsArticle article) {
+            Log.d("mos samy", "artical: " + article);
             binding.titleText.setText(article.getTitle());
             binding.authorText.setText(article.getAuthor());
             binding.dateText.setText(article.getDate());
             // Load image using Glide
             Glide.with(binding.getRoot())
-                .load(article.getImageUrl())
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(binding.newsImage);
+                    .load(article.getImageUrl())
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(binding.newsImage);
         }
     }
 }
