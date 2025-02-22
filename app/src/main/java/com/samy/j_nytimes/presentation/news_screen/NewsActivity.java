@@ -1,7 +1,11 @@
 package com.samy.j_nytimes.presentation.news_screen;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -9,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.samy.j_nytimes.databinding.ActivityNewsBinding;
+import com.samy.j_nytimes.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -27,11 +32,10 @@ public class NewsActivity extends AppCompatActivity {
         binding = ActivityNewsBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(NewsViewModel.class);
         setContentView(binding.getRoot());
-
-        setupRecyclerView();
+        Utils.statusBarColor(this);
+       setupRecyclerView();
         observeNews();
     }
-
     private void setupRecyclerView() {
         newsAdapter = new NewsAdapter();
         binding.recyclerView.setAdapter(newsAdapter);
