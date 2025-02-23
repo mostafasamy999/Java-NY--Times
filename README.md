@@ -2,7 +2,11 @@
 
 ## Overview
 This project follows **Clean Architecture** and **MVVM** design patterns, ensuring scalability and maintainability. It utilizes **RxJava** for reactive programming, **Shimmer** for loading animations, and best practices for **ListAdapter**. The app features API integration, robust error handling, and search functionality.
-<!-- Uploading "WhatsApp Video 2025-02-23 at 13.27.06_c70c0205.mp4"... -->
+
+## Screenshots && Video
+![Uploading ui.png…]()
+
+
 ## Features
 - **MVVM Architecture** for better separation of concerns
 - **Clean Architecture** with domain, data, and presentation layers
@@ -36,7 +40,7 @@ app/
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo.git
+   git clone https://github.com/mostafasamy999/Java-NY--Times.git
    ```
 2. Open the project in **Android Studio**
 3. Sync Gradle files and build the project
@@ -56,12 +60,7 @@ app/
 - Proper error messages for network failures
 - Retry mechanism for failed API requests
 
-## Screenshots
-(Add relevant UI screenshots here)
-
-## License
-This project is licensed under the MIT License. See `LICENSE` for more details.
 
 ## Contact
-For any queries, reach out to: **your.email@example.com**
+For any queries, reach out to: **mostafasamy.dev@gmail.com**
 
