@@ -30,13 +30,11 @@ public class NewsViewModel extends ViewModel {
     private final MutableLiveData<Resource<List<NewsArticle>>> _newsArticles = new MutableLiveData<>();
     public LiveData<Resource<List<NewsArticle>>> newsArticles = _newsArticles;
     private final CompositeDisposable disposables = new CompositeDisposable();
-
     @Inject
     public NewsViewModel(GetMostPopularNewsUseCase getMostPopularNewsUseCase) {
         this.getMostPopularNewsUseCase = getMostPopularNewsUseCase;
         loadNews();
     }
-
     private void loadNews() {
         _newsArticles.setValue(Resource.loading());
 

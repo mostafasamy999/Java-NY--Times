@@ -1,6 +1,6 @@
 package com.samy.j_nytimes.di;
 
-import static com.samy.j_nytimes.utils.AppConstants.BASE_URL;
+
 
 import com.samy.j_nytimes.data.datasource.NewsApiService;
 import com.samy.j_nytimes.data.repositorirs.NewsRepositoryImpl;
@@ -31,13 +31,11 @@ public class AppModule {
                 .build()
                 .create(NewsApiService.class);
     }
-
     @Provides
     @Singleton
     public NewsRepository provideNewsRepository(NewsApiService apiService) {
         return new NewsRepositoryImpl(apiService);
     }
-
     @Provides
     public GetMostPopularNewsUseCase provideGetMostPopularNewsUseCase(NewsRepository repository) {
         return new GetMostPopularNewsUseCase(repository);

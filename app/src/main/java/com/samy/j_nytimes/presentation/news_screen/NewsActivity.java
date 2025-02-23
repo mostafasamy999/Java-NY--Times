@@ -63,10 +63,8 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     private void observeNews() {
-
         viewModel.newsArticles.observe(this, resource -> {
             binding.swipeRefresh.setRefreshing(false);
-
             switch (resource.status) {
                 case LOADING:
                     if (allArticles.isEmpty()) {
