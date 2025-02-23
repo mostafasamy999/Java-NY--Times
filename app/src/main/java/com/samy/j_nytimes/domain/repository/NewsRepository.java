@@ -1,7 +1,5 @@
 package com.samy.j_nytimes.domain.repository;
 
-//import com.bumptech.glide.load.engine.Resource;
-
 import com.samy.j_nytimes.domain.entities.NewsArticle;
 
 import java.util.List;

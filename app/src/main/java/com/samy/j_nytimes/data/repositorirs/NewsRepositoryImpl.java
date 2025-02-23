@@ -14,28 +14,20 @@ import retrofit2.HttpException;
 @Singleton
 public class NewsRepositoryImpl implements NewsRepository {
     private final NewsApiService apiService;
-
     @Inject
     public NewsRepositoryImpl(NewsApiService apiService) {
         this.apiService = apiService;
     }
-
     @Override
     public Observable<List<NewsArticle>> getMostPopularNews(String apiKey) {
         return apiService.getMostPopularArticles(apiKey)
                 .map(newsResponse -> {
-                    if (newsResponse == null) {
+                    if (newsResponse == null)
                         throw new IllegalStateException("News response is null");
-                    }
-
-                    if (newsResponse.getResponse() == null) {
+                    if (newsResponse.getResponse() == null)
                         throw new IllegalStateException("News response body is null");
-                    }
-
-                    if (newsResponse.getResponse().getDocs() == null) {
+                    if (newsResponse.getResponse().getDocs() == null)
                         return Collections.<NewsArticle>emptyList();
-                    }
-
                     List<NewsArticle> articles = newsResponse.getResponse().getDocs().stream()
                             .filter(doc -> doc != null && doc.getHeadline() != null)
                             .map(doc -> new NewsArticle(
