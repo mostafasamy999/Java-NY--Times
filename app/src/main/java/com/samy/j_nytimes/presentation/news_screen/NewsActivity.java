@@ -63,20 +63,22 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     private void observeNews() {
+
         viewModel.newsArticles.observe(this, resource -> {
             binding.swipeRefresh.setRefreshing(false);
 
             switch (resource.status) {
                 case LOADING:
                     if (allArticles.isEmpty()) {
-                        // Show shimmer only for initial load
                         binding.shimmerLayout.setVisibility(View.VISIBLE);
+                        binding.shimmerLayout.startShimmer();
                         binding.recyclerView.setVisibility(View.GONE);
                         binding.errorLayout.setVisibility(View.GONE);
                     }
                     break;
 
                 case SUCCESS:
+                    binding.shimmerLayout.stopShimmer();
                     binding.shimmerLayout.setVisibility(View.GONE);
                     binding.swipeRefresh.setVisibility(View.VISIBLE);
                     binding.recyclerView.setVisibility(View.VISIBLE);
@@ -86,8 +88,8 @@ public class NewsActivity extends AppCompatActivity {
                     break;
 
                 case ERROR:
+                    binding.shimmerLayout.stopShimmer();
                     if (allArticles.isEmpty()) {
-                        // Show error layout only if we have no data to display
                         binding.shimmerLayout.setVisibility(View.GONE);
                         binding.swipeRefresh.setVisibility(View.GONE);
                         binding.errorLayout.setVisibility(View.VISIBLE);

@@ -4,11 +4,13 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -44,6 +46,7 @@ public class DetailActivity extends AppCompatActivity {
         setupStatusBarAndToolbar();
         setupUI();
     }
+
     private void setupStatusBarAndToolbar() {
         // Set status bar color
         Window window = getWindow();
@@ -67,17 +70,25 @@ public class DetailActivity extends AppCompatActivity {
         binding.toolbar.setBackgroundColor(getResources().getColor(R.color.ny_times_green));
         binding.toolbar.setTitleTextColor(Color.WHITE);
     }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // Close the activity
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void setupUI() {
         binding.titleText.setText(article.getTitle());
         binding.abstractText.setText(article.getSummary());
         binding.authorText.setText(article.getAuthor());
-        binding.dateText.setText(article.getDate().substring(1,10));
+        binding.dateText.setText(article.getDate().substring(1, 10));
 
         // Load image if available
         if (article.getImageUrl() != null && !article.getImageUrl().isEmpty()) {
             Glide.with(this)
-                    .load("https://static01.nyt.com/"+article.getImageUrl())
+                    .load("https://static01.nyt.com/" + article.getImageUrl())
                     .error(R.drawable.error_image)
                     .centerCrop()
                     .into(binding.articleImage);

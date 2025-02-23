@@ -76,13 +76,14 @@
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
-
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/articleImage"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="16dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/corneredImageViewRounded" />
+
 
             <TextView
                 android:id="@+id/bodyText"

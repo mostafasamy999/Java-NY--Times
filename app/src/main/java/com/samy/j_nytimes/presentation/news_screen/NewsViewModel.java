@@ -33,13 +33,18 @@ public class NewsViewModel extends ViewModel {
     }
 
     private void loadNews() {
-        repository.getMostPopularNews(AppConstants.API_KEY)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        articles -> _newsArticles.setValue(Resource.success( articles)),
-                        error -> _newsArticles.setValue(Resource.error(error.getMessage()))
-                );
+        _newsArticles.setValue(Resource.loading());
+        try {
+            repository.getMostPopularNews(AppConstants.API_KEY)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            articles -> _newsArticles.setValue(Resource.success( articles)),
+                            error -> _newsArticles.setValue(Resource.error(error.getMessage()))
+                    );
+        } catch (Exception e) {
+            _newsArticles.setValue(Resource.error(e.getMessage()));
+        }
     }
 
 
