@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 //import com.bumptech.glide.load.engine.Resource;
 import com.samy.j_nytimes.domain.entities.NewsArticle;
 import com.samy.j_nytimes.domain.repository.NewsRepository;
+import com.samy.j_nytimes.utils.AppConstants;
 import com.samy.j_nytimes.utils.Resource;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class NewsViewModel extends ViewModel {
     }
 
     private void loadNews() {
-        repository.getMostPopularNews("seK0AFEPwKbuArKaL0vYwuqAJFgRsAai")
+        repository.getMostPopularNews(AppConstants.API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
