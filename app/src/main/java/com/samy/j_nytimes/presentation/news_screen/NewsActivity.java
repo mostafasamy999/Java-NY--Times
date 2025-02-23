@@ -92,10 +92,10 @@ public class NewsActivity extends AppCompatActivity {
                     if (allArticles.isEmpty()) {
                         binding.shimmerLayout.setVisibility(View.GONE);
                         binding.swipeRefresh.setVisibility(View.GONE);
+                        binding.recyclerView.setVisibility(View.GONE);
                         binding.errorLayout.setVisibility(View.VISIBLE);
                         binding.errorMessage.setText(resource.message);
                     } else {
-                        // Show snackbar if we have data to display
                         Snackbar.make(binding.getRoot(),
                                         resource.message,
                                         Snackbar.LENGTH_LONG)

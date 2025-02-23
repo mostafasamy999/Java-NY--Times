@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,6 +65,8 @@
                     android:id="@+id/authorText"
                     android:layout_width="0dp"
                     android:text="title"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1" />

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import io.reactivex.rxjava3.core.Observable;
+import retrofit2.HttpException;
 
 @Singleton
 public class NewsRepositoryImpl implements NewsRepository {
@@ -23,20 +24,40 @@ public class NewsRepositoryImpl implements NewsRepository {
     public Observable<List<NewsArticle>> getMostPopularNews(String apiKey) {
         return apiService.getMostPopularArticles(apiKey)
                 .map(newsResponse -> {
-                    if (newsResponse.getResponse() == null || newsResponse.getResponse().getDocs() == null) {
+                    if (newsResponse == null) {
+                        throw new IllegalStateException("News response is null");
+                    }
+
+                    if (newsResponse.getResponse() == null) {
+                        throw new IllegalStateException("News response body is null");
+                    }
+
+                    if (newsResponse.getResponse().getDocs() == null) {
                         return Collections.<NewsArticle>emptyList();
                     }
-                    return newsResponse.getResponse().getDocs().stream()
+
+                    List<NewsArticle> articles = newsResponse.getResponse().getDocs().stream()
+                            .filter(doc -> doc != null && doc.getHeadline() != null)
                             .map(doc -> new NewsArticle(
                                     doc.getHeadline().getMain(),
-                                    doc.getByline().getOriginal(),
+                                    doc.getByline() != null ? doc.getByline().getOriginal() : "Unknown Author",
                                     doc.getLeadParagraph(),
                                     doc.getPubDate(),
-                                    doc.getMultimedia().isEmpty() ? "" : doc.getMultimedia().get(0).getUrl()
+                                    doc.getMultimedia() != null && !doc.getMultimedia().isEmpty()
+                                            ? doc.getMultimedia().get(0).getUrl()
+                                            : ""
                             ))
                             .collect(Collectors.toList());
+
+                    return articles;
                 })
-                .onErrorReturnItem(Collections.emptyList());
+                .onErrorResumeNext(error -> {
+                    // Log the error here if you have a logging system
+                    if (error instanceof HttpException) {
+                        return Observable.error(error);
+                    }
+                    return Observable.error(new Exception("Failed to fetch news articles", error));
+                });
     }
 
 }
