@@ -9,5 +9,9 @@
     <color name="colorTextPrimary">#212121</color>
     <color name="colorTextSecondary">#757575</color>
     <color name="colorError">#B00020</color>
-    <color name="shimmerColor">#DDDDDD</color>
+    <color name="shimmerColor">#A9A9A9</color>
+
+    <color name="ny_times_green">#00897B</color>
+
+
 </resources>

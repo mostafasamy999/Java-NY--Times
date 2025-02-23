@@ -1,6 +1,5 @@
 package com.samy.j_nytimes.presentation.news_screen;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,12 +12,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.samy.j_nytimes.R;
 import com.samy.j_nytimes.databinding.ActivityNewsBinding;
 import com.samy.j_nytimes.domain.entities.NewsArticle;
 import com.samy.j_nytimes.presentation.detail_screen.DetailActivity;
-import com.samy.j_nytimes.utils.Utils;
-
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -35,9 +32,26 @@ public class NewsActivity extends AppCompatActivity {
         binding = ActivityNewsBinding.inflate(getLayoutInflater());
         viewModel = new ViewModelProvider(this).get(NewsViewModel.class);
         setContentView(binding.getRoot());
-        Utils.statusBarColor(this);
+        setupStatusBarAndToolbar();
         setupRecyclerView();
         observeNews();
+    }
+    private void setupStatusBarAndToolbar() {
+        // Set status bar color
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.ny_times_green));
+
+        // Setup toolbar
+        setSupportActionBar(binding.toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("NY Times Most Popular");
+
+
+        }
+
+        binding.toolbar.setBackgroundColor(getResources().getColor(R.color.ny_times_green));
+        binding.toolbar.setTitleTextColor(Color.WHITE);
     }
 
     private void setupRecyclerView() {

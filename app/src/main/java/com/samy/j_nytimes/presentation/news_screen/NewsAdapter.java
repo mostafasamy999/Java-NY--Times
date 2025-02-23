@@ -61,8 +61,6 @@ public class NewsAdapter extends ListAdapter<NewsArticle, NewsAdapter.NewsViewHo
         }
 
         void bind(NewsArticle article, OnItemClickListener onClickListener) {
-            Log.d("mos samy", "artical:title: " + article.getTitle());
-            Log.d("mos samy", "artical:url: " + article.getImageUrl());
             binding.titleText.setText(article.getTitle());
             binding.authorText.setText(article.getAuthor());
             binding.dateText.setText(article.getDate().substring(0,10));
