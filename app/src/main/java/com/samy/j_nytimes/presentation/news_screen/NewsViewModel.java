@@ -41,4 +41,10 @@ public class NewsViewModel extends ViewModel {
                         error -> _newsArticles.setValue(Resource.error(error.getMessage()))
                 );
     }
+
+
+
+    public void refreshNews() {
+        loadNews();
+    }
 }

@@ -78,6 +78,7 @@ public class DetailActivity extends AppCompatActivity {
         if (article.getImageUrl() != null && !article.getImageUrl().isEmpty()) {
             Glide.with(this)
                     .load("https://static01.nyt.com/"+article.getImageUrl())
+                    .error(R.drawable.error_image)
                     .centerCrop()
                     .into(binding.articleImage);
         }

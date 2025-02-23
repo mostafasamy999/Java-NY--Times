@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.samy.j_nytimes.R;
 import com.samy.j_nytimes.databinding.ItemNewsBinding;
 import com.samy.j_nytimes.domain.entities.NewsArticle;
 
@@ -67,6 +68,7 @@ public class NewsAdapter extends ListAdapter<NewsArticle, NewsAdapter.NewsViewHo
             // Load image using Glide
             Glide.with(binding.getRoot())
                     .load("https://static01.nyt.com/"+article.getImageUrl())
+                    .error(R.drawable.error_image)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(binding.newsImage);
             binding.getRoot().setOnClickListener(new View.OnClickListener() {

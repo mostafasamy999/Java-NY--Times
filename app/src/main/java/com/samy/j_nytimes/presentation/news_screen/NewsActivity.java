@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.samy.j_nytimes.R;
 import com.samy.j_nytimes.databinding.ActivityNewsBinding;
 import com.samy.j_nytimes.domain.entities.NewsArticle;
@@ -43,7 +44,65 @@ public class NewsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setupStatusBarAndToolbar();
         setupRecyclerView();
+        setupSwipeRefresh();
+        setupErrorHandling();
         observeNews();
+    }
+
+    private void setupSwipeRefresh() {
+        binding.swipeRefresh.setColorSchemeResources(R.color.ny_times_green);
+        binding.swipeRefresh.setOnRefreshListener(() -> {
+            viewModel.refreshNews();
+        });
+    }
+
+    private void setupErrorHandling() {
+        binding.retryButton.setOnClickListener(v -> {
+            viewModel.refreshNews();
+        });
+    }
+
+    private void observeNews() {
+        viewModel.newsArticles.observe(this, resource -> {
+            binding.swipeRefresh.setRefreshing(false);
+
+            switch (resource.status) {
+                case LOADING:
+                    if (allArticles.isEmpty()) {
+                        // Show shimmer only for initial load
+                        binding.shimmerLayout.setVisibility(View.VISIBLE);
+                        binding.recyclerView.setVisibility(View.GONE);
+                        binding.errorLayout.setVisibility(View.GONE);
+                    }
+                    break;
+
+                case SUCCESS:
+                    binding.shimmerLayout.setVisibility(View.GONE);
+                    binding.swipeRefresh.setVisibility(View.VISIBLE);
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    binding.errorLayout.setVisibility(View.GONE);
+                    allArticles = resource.data;
+                    newsAdapter.submitList(resource.data);
+                    break;
+
+                case ERROR:
+                    if (allArticles.isEmpty()) {
+                        // Show error layout only if we have no data to display
+                        binding.shimmerLayout.setVisibility(View.GONE);
+                        binding.swipeRefresh.setVisibility(View.GONE);
+                        binding.errorLayout.setVisibility(View.VISIBLE);
+                        binding.errorMessage.setText(resource.message);
+                    } else {
+                        // Show snackbar if we have data to display
+                        Snackbar.make(binding.getRoot(),
+                                        resource.message,
+                                        Snackbar.LENGTH_LONG)
+                                .setAction("Retry", v -> viewModel.refreshNews())
+                                .show();
+                    }
+                    break;
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -151,28 +210,5 @@ public class NewsActivity extends AppCompatActivity {
         );
     }
 
-    private void observeNews() {
-        viewModel.newsArticles.observe(this, resource -> {
-            switch (resource.status) {
-                case LOADING:
-                    binding.shimmerLayout.setVisibility(View.VISIBLE);
-                    binding.recyclerView.setVisibility(View.GONE);
-                    binding.errorLayout.setVisibility(View.GONE);
-                    break;
-                case SUCCESS:
-                    binding.shimmerLayout.setVisibility(View.GONE);
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                    binding.errorLayout.setVisibility(View.GONE);
-                    allArticles = resource.data;
-                    newsAdapter.submitList(resource.data);
-                    break;
-                case ERROR:
-                    binding.shimmerLayout.setVisibility(View.GONE);
-                    binding.recyclerView.setVisibility(View.GONE);
-                    binding.errorLayout.setVisibility(View.VISIBLE);
-                    binding.errorMessage.setText(resource.message);
-                    break;
-            }
-        });
-    }
+
 }
