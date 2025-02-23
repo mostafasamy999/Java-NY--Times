@@ -4,8 +4,8 @@
 This project follows **Clean Architecture** and **MVVM** design patterns, ensuring scalability and maintainability. It utilizes **RxJava** for reactive programming, **Shimmer** for loading animations, and best practices for **ListAdapter**. The app features API integration, robust error handling, and search functionality.
 
 ## Screenshots && Video[
-https://drive.google.com/file/d/1ifra3ia0HFyHhNJRUoF2kozUbLmoF66X/view?usp=drive_link](https://drive.google.com/file/d/17DPWhumxZ-8cpuVcUe9s1U3tq8IL4YEC/view?usp=drive_link)
-
+[https://drive.google.com/file/d/1ifra3ia0HFyHhNJRUoF2kozUbLmoF66X/view?usp=drive_link](https://drive.google.com/file/d/17DPWhumxZ-8cpuVcUe9s1U3tq8IL4YEC/view?usp=drive_link)
+](https://drive.google.com/file/d/17DPWhumxZ-8cpuVcUe9s1U3tq8IL4YEC/view?usp=drive_link)
 ## Features
 - **MVVM Architecture** for better separation of concerns
 - **Clean Architecture** with domain, data, and presentation layers
