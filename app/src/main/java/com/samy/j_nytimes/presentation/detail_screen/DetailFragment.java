@@ -20,23 +20,19 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class DetailFragment extends Fragment {
     private FragmentDetailBinding binding;
     private NewsArticle article;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         if (getArguments() != null) {
             article = getArguments().getParcelable("article");
             setupUI();
         }}
-
     private void setupUI() {
         binding.titleText.setText(article.getTitle());
         binding.abstractText.setText(article.getSummary());
