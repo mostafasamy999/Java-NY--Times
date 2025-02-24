@@ -32,16 +32,10 @@ public class DetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Get arguments from navigation
-        String title = requireArguments().getString("title");
-        String date = requireArguments().getString("date");
-        String author = requireArguments().getString("auth");
-        String imgUrl = requireArguments().getString("imgUrl");
-        String description = requireArguments().getString("description");
-
-        article = new NewsArticle(title, author, description, date, imgUrl);
-        setupUI();
-    }
+        if (getArguments() != null) {
+            article = getArguments().getParcelable("article");
+            setupUI();
+        }}
 
     private void setupUI() {
         binding.titleText.setText(article.getTitle());

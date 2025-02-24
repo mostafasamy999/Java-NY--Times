@@ -194,12 +194,7 @@ public class NewsFragment extends Fragment {
         newsAdapter = new NewsAdapter();
         newsAdapter.setOnClickListener(article -> {
             Bundle args = new Bundle();
-            args.putString("title", article.getTitle());
-            args.putString("date", article.getDate());
-            args.putString("auth", article.getAuthor());
-            args.putString("imgUrl", article.getImageUrl());
-            args.putString("description", article.getSummary());
-
+            args.putParcelable("article", article);
             Navigation.findNavController(requireView())
                     .navigate(R.id.action_news_to_detail, args);
         });

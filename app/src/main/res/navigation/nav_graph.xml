@@ -26,19 +26,7 @@
         tools:layout="@layout/fragment_detail">
 
         <argument
-            android:name="title"
-            app:argType="string" />
-        <argument
-            android:name="date"
-            app:argType="string" />
-        <argument
-            android:name="auth"
-            app:argType="string" />
-        <argument
-            android:name="imgUrl"
-            app:argType="string" />
-        <argument
-            android:name="description"
-            app:argType="string" />
+            android:name="article"
+            app:argType="com.samy.j_nytimes.domain.entities.NewsArticle" />
     </fragment>
 </navigation>
