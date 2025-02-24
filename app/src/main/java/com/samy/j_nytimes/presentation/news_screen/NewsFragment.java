@@ -1,28 +1,30 @@
 package com.samy.j_nytimes.presentation.news_screen;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.samy.j_nytimes.R;
-import com.samy.j_nytimes.databinding.ActivityNewsBinding;
+import com.samy.j_nytimes.databinding.FragmentNewsBinding;
 import com.samy.j_nytimes.domain.entities.NewsArticle;
-import com.samy.j_nytimes.presentation.detail_screen.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,19 +32,30 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class NewsActivity extends AppCompatActivity {
-    private ActivityNewsBinding binding;
+public class NewsFragment extends Fragment {
+    private FragmentNewsBinding binding;
     private NewsAdapter newsAdapter;
     private NewsViewModel viewModel;
     private List<NewsArticle> allArticles = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityNewsBinding.inflate(getLayoutInflater());
+        setHasOptionsMenu(true);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentNewsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(NewsViewModel.class);
-        setContentView(binding.getRoot());
-        setupStatusBarAndToolbar();
+
         setupRecyclerView();
         setupSwipeRefresh();
         setupErrorHandling();
@@ -63,7 +76,7 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     private void observeNews() {
-        viewModel.newsArticles.observe(this, resource -> {
+        viewModel.newsArticles.observe(getViewLifecycleOwner(), resource -> {
             binding.swipeRefresh.setRefreshing(false);
             switch (resource.status) {
                 case LOADING:
@@ -104,9 +117,10 @@ public class NewsActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.news_menu, menu);
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.news_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
@@ -149,8 +163,7 @@ public class NewsActivity extends AppCompatActivity {
             }
         });
 
-        // Rest of your code...
-        return true;
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void filterArticles(String query) {
@@ -177,38 +190,30 @@ public class NewsActivity extends AppCompatActivity {
         newsAdapter.submitList(filteredList);
     }
 
-    private void setupStatusBarAndToolbar() {
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getResources().getColor(R.color.ny_times_green));
-
-        setSupportActionBar(binding.toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("NY Times Most Popular");
-        }
-
-        binding.toolbar.setBackgroundColor(getResources().getColor(R.color.ny_times_green));
-        binding.toolbar.setTitleTextColor(Color.WHITE);
-    }
-
     private void setupRecyclerView() {
         newsAdapter = new NewsAdapter();
         newsAdapter.setOnClickListener(article -> {
-            Intent intent = new Intent(NewsActivity.this, DetailActivity.class);
-            intent.putExtra("title", article.getTitle());
-            intent.putExtra("date", article.getDate());
-            intent.putExtra("auth", article.getAuthor());
-            intent.putExtra("imgUrl", article.getImageUrl());
-            intent.putExtra("description", article.getSummary());
-            startActivity(intent);
+            Bundle args = new Bundle();
+            args.putString("title", article.getTitle());
+            args.putString("date", article.getDate());
+            args.putString("auth", article.getAuthor());
+            args.putString("imgUrl", article.getImageUrl());
+            args.putString("description", article.getSummary());
+
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.action_news_to_detail, args);
         });
 
         binding.recyclerView.setAdapter(newsAdapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerView.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+                new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         );
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }
